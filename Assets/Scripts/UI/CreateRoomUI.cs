@@ -21,7 +21,6 @@ public class CreateRoomUI : MonoBehaviour
 
         GameManager.Inst().NetManager.CreateRoom(name, max);
 
-        //Go to Room UI
-
+        gameObject.SetActive(false);
     }
 }

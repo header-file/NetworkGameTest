@@ -9,6 +9,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public Vector3 SpawnPos;
     public GameObject RoomUIPref;
 
+
     void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
@@ -23,24 +24,31 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        //RoomOptions options = new RoomOptions();
-        //options.MaxPlayers = 4;
-        //PhotonNetwork.JoinOrCreateRoom("Room1", options, null);
-        //PhotonNetwork.JoinRoom("Room1");
+        Debug.Log("Connected To Master Server");
 
-        
+        PhotonNetwork.JoinLobby();        
+    }
+
+    public override void OnJoinedLobby()
+    {
+        Debug.Log("Joined Default Lobby");
     }
 
     public void RefreshRooms()
     {
-        List<RoomInfo> roomList = new List<RoomInfo>();
-        OnRoomListUpdate(roomList);
+        //PhotonNetwork.LocalPlayer.CustomProperties.Add(GAME_MODE, true);
+    }
 
-        for(int i = 0; i < roomList.Count; i++)
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        for (int i = 0; i < GameManager.Inst().UiManager.Lobby.RoomSpace.childCount; i++)
+            Destroy(GameManager.Inst().UiManager.Lobby.RoomSpace.GetChild(i));
+
+        for (int i = 0; i < roomList.Count; i++)
         {
             GameObject obj = Instantiate(RoomUIPref);
             Room room = obj.GetComponent<Room>();
-            room.transform.parent = GameManager.Inst().UiManager.Lobby.transform;
+            room.transform.SetParent(GameManager.Inst().UiManager.Lobby.RoomSpace);
 
             room.RoomName.text = roomList[i].Name;
             room.RoomMembers.text = roomList[i].PlayerCount + " / " + roomList[i].MaxPlayers;
@@ -51,9 +59,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         RoomOptions options = new RoomOptions();
         options.MaxPlayers = (byte)MaxPlayers;
+        //options.CustomRoomProperties = new Hashtable { { GAME_MODE, 1 } };
         PhotonNetwork.CreateRoom(RoomName, options, null);
 
         Debug.Log("Create Room : " + RoomName);
+    }
+
+    public override void OnCreatedRoom()
+    {
+        GameManager.Inst().UiManager.Room.CreateRoom();
     }
 
     public void JoinRoom(string roomName)
@@ -63,7 +77,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        //PhotonNetwork.Instantiate("Player", SpawnPos, Quaternion.identity);
+        GameManager.Inst().UiManager.Room.ShowRoom();
+
         Debug.Log("Joined to " + PhotonNetwork.CurrentRoom.Name);
     }
 
@@ -72,8 +87,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log(returnCode + " : " + message);
     }
 
-    void CreateRoom()
-    {
-        PhotonNetwork.CreateRoom("DefaultRoom", new RoomOptions { MaxPlayers = 4 });
-    }
+    //void CreateRoom()
+    //{
+    //    PhotonNetwork.CreateRoom("DefaultRoom", new RoomOptions { MaxPlayers = 4 });
+    //}
 }

@@ -8,7 +8,7 @@ public class EnemyManager : MonoBehaviour
 
     void Start()
     {
-        Spawn();
+        //Spawn();
     }
 
     void Update()

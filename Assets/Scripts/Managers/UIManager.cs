@@ -6,4 +6,5 @@ public class UIManager : MonoBehaviour
 {
     public UpperUI UpperUI;
     public Lobby Lobby;
+    public RoomUI Room;
 }
