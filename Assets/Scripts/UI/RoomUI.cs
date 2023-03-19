@@ -13,17 +13,16 @@ public class RoomUI : MonoBehaviour
     public GameObject StartBtn;
     public GameObject AssertionExit;
 
-    public GameObject PlayerSlotPref;
-    public GameObject EmptySlotPref;
+    public PlayerSlot[] PSlots;
 
     Hashtable RoomPlayerProperties;
-    PlayerSlot[] PSlots;
 
 
     void Awake()
     {
         RoomPlayerProperties = new Hashtable();
         RoomPlayerProperties.Add("IsReady", false);
+        RoomPlayerProperties.Add("IsStart", false);
 
         AssertionExit.SetActive(false);
         gameObject.SetActive(false);
@@ -32,6 +31,8 @@ public class RoomUI : MonoBehaviour
     void Update()
     {
         PlayerUpdate();
+        BtnUpdate();
+        CheckStart();
     }
 
     void PlayerUpdate()
@@ -47,7 +48,7 @@ public class RoomUI : MonoBehaviour
                         if (PSlots[i].Empty.activeSelf)
                             PSlots[i].PlayerOn(PhotonNetwork.PlayerList[i].NickName);
 
-                        if (PhotonNetwork.PlayerList[i].CustomProperties != null &&
+                        if (PhotonNetwork.PlayerList[i].CustomProperties.ContainsKey("IsReady") != false &&
                             PhotonNetwork.PlayerList[i].CustomProperties.GetValueOrDefault("IsReady").Equals(true))
                             PSlots[i].Ready.SetActive(true);
                         else
@@ -58,6 +59,33 @@ public class RoomUI : MonoBehaviour
                     PSlots[i].PlayerOff();
             }
         }
+    }
+
+    void BtnUpdate()
+    {
+        if (!StartBtn.activeSelf)
+            return;
+
+        int readyCount = 0;
+        for(int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            if (PhotonNetwork.PlayerList[i].CustomProperties.ContainsKey("IsReady") != false &&
+                PhotonNetwork.PlayerList[i].CustomProperties.GetValueOrDefault("IsReady").Equals(true))
+                readyCount++;
+        }
+
+        if (readyCount > 1 && 
+            readyCount == PhotonNetwork.CurrentRoom.PlayerCount)
+            StartBtn.GetComponent<Button>().interactable = true;
+        else
+            StartBtn.GetComponent<Button>().interactable = false;
+    }
+
+    void CheckStart()
+    {
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("IsStart") != false &&
+            PhotonNetwork.LocalPlayer.CustomProperties.GetValueOrDefault("IsStart").Equals(true))
+            GameManager.Inst().UiManager.CloseLobbyAndRoom();
     }
 
     public void CreateRoom()
@@ -81,38 +109,27 @@ public class RoomUI : MonoBehaviour
 
     void ShowSlot()
     {
-        PSlots = new PlayerSlot[4];
-
         for (int i = 0; i < 4; i++)
         {
             if (i < PhotonNetwork.CurrentRoom.MaxPlayers)
             {
                 if (i < PhotonNetwork.PlayerList.Length)
                 {
-                    GameObject slot = Instantiate(PlayerSlotPref);
-                    slot.transform.SetParent(PlayerSlots);
-                    PlayerSlot pSlot = slot.GetComponent<PlayerSlot>();
-                    pSlot.PlayerOn(PhotonNetwork.PlayerList[i].NickName);
+                    PSlots[i].AvailableOn();
+                    PSlots[i].PlayerOn(PhotonNetwork.PlayerList[i].NickName);
 
                     if (PhotonNetwork.PlayerList[i].IsMasterClient)
-                        pSlot.Owner.SetActive(true);
+                        PSlots[i].Owner.SetActive(true);
                 }
                 else
                 {
-                    GameObject slot = Instantiate(PlayerSlotPref);
-                    slot.transform.SetParent(PlayerSlots);
+                    PSlots[i].AvailableOn();
+                    PSlots[i].PlayerOff();
                 }
             }
             else
-            {
-                GameObject slot = Instantiate(EmptySlotPref);
-                slot.transform.SetParent(PlayerSlots);
-            }
+                PSlots[i].AvailableOff();
         }
-
-        for (int i = 0; i < 4; i++)
-            if (PlayerSlots.GetChild(i) != null)
-                PSlots[i] = PlayerSlots.GetChild(i).GetComponent<PlayerSlot>();
     }
 
     void ShowBtn()
@@ -121,6 +138,7 @@ public class RoomUI : MonoBehaviour
         {
             ReadyBtn.SetActive(false);
             StartBtn.SetActive(true);
+            StartBtn.GetComponent<Button>().interactable = false;
         }
         else
         {
@@ -133,13 +151,13 @@ public class RoomUI : MonoBehaviour
     {
         if (PhotonNetwork.LocalPlayer.CustomProperties.GetValueOrDefault("IsReady").Equals(false))
         {
-            RoomPlayerProperties.Clear();
+            RoomPlayerProperties.Remove("IsReady");
             RoomPlayerProperties.Add("IsReady", true);
             PhotonNetwork.LocalPlayer.SetCustomProperties(RoomPlayerProperties);
         }
         else
         {
-            RoomPlayerProperties.Clear();
+            RoomPlayerProperties.Remove("IsReady");
             RoomPlayerProperties.Add("IsReady", false);
             PhotonNetwork.LocalPlayer.SetCustomProperties(RoomPlayerProperties);
         }
@@ -147,7 +165,11 @@ public class RoomUI : MonoBehaviour
 
     public void OnClickStartBtn()
     {
-        
+        RoomPlayerProperties.Remove("IsStart");
+        RoomPlayerProperties.Add("IsStart", true);
+
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+            PhotonNetwork.PlayerList[i].SetCustomProperties(RoomPlayerProperties);
     }
 
     public void OnClickExitBtn()

@@ -6,6 +6,9 @@ using Photon.Pun;
 
 public class PlayerSlot : MonoBehaviour
 {
+    public GameObject Available;
+    public GameObject NotAvailable;
+
     public GameObject Ready;
     public GameObject Owner;
     public GameObject Empty;
@@ -32,5 +35,17 @@ public class PlayerSlot : MonoBehaviour
         Ready.SetActive(false);
         PlayerName.gameObject.SetActive(false);
         Empty.SetActive(true);
+    }
+
+    public void AvailableOn()
+    {
+        Available.SetActive(true);
+        NotAvailable.SetActive(false);
+    }
+
+    public void AvailableOff()
+    {
+        Available.SetActive(false);
+        NotAvailable.SetActive(true);
     }
 }
