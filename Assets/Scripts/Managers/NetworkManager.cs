@@ -42,7 +42,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         for (int i = 0; i < GameManager.Inst().UiManager.Lobby.RoomSpace.childCount; i++)
-            Destroy(GameManager.Inst().UiManager.Lobby.RoomSpace.GetChild(i));
+            Destroy(GameManager.Inst().UiManager.Lobby.RoomSpace.GetChild(i).gameObject);
 
         for (int i = 0; i < roomList.Count; i++)
         {
