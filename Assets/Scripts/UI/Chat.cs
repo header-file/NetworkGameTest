@@ -22,7 +22,7 @@ public class Chat : MonoBehaviour, IChatClientListener
         Nickname = PhotonNetwork.NickName;
 
         ChatClient = new ChatClient(this);
-        ChatClient.Connect("e9248e05-d4c3-4441-880c-c57cc38f0e71", "1.0", new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
+        ChatClient.Connect("", "1.0", new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
         ScrollBar.SetActive(false);
     }
 
@@ -64,7 +64,7 @@ public class Chat : MonoBehaviour, IChatClientListener
 
     public void OnConnected()
     {
-        AddLine("¼­¹ö¿¡ ¿¬°áµÇ¾ú½À´Ï´Ù.");
+        AddLine("ì„œë²„ì— ì—°ê²°ë˜ì—ˆìŠµë‹ˆë‹¤.");
 
         ChannelName = PhotonNetwork.CurrentRoom.Name + "_" + PhotonNetwork.CurrentRoom.MasterClientId.ToString();
         ChatClient.Subscribe(new string[] { ChannelName }, 10);
@@ -72,7 +72,7 @@ public class Chat : MonoBehaviour, IChatClientListener
 
     public void OnDisconnected()
     {
-        AddLine("¼­¹ö¿Í ¿¬°áÀÌ ²÷¾îÁ³½À´Ï´Ù.");
+        AddLine("ì„œë²„ì™€ ì—°ê²°ì´ ëŠì–´ì¡ŒìŠµë‹ˆë‹¤.");
     }
 
     public void OnChatStateChange(ChatState state)
@@ -82,12 +82,12 @@ public class Chat : MonoBehaviour, IChatClientListener
 
     public void OnSubscribed(string[] channels, bool[] results)
     {
-        AddLine(string.Format("Ã¤³Î ÀÔÀå ({0})", string.Join(",", channels)));
+        AddLine(string.Format("ì±„ë„ ì…ì¥ ({0})", string.Join(",", channels)));
     }
 
     public void OnUnsubscribed(string[] channels)
     {
-        AddLine(string.Format("Ã¤³Î ÅğÀå ({0})", string.Join(",", channels)));
+        AddLine(string.Format("ì±„ë„ í‡´ì¥ ({0})", string.Join(",", channels)));
     }
 
     public void OnGetMessages(string channelName, string[] senders, object[] messages)
