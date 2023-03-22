@@ -22,7 +22,7 @@ public class Chat : MonoBehaviour, IChatClientListener
         Nickname = PhotonNetwork.NickName;
 
         ChatClient = new ChatClient(this);
-        ChatClient.Connect("", "1.0", new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
+        ChatClient.Connect("e9248e05-d4c3-4441-880c-c57cc38f0e71", "1.0", new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
         ScrollBar.SetActive(false);
     }
 
