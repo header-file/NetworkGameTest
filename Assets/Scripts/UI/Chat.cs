@@ -34,11 +34,15 @@ public class Chat : MonoBehaviour, IChatClientListener
             OnClickPublishMessage();
     }
 
-    void ExpandContent(int lineCount)
+    void ExpandContent()
     {
-        Vector2 size = OutputText.GetComponent<RectTransform>().sizeDelta;
-        size.y = OutputText.fontSize * lineCount;
-        OutputText.GetComponent<RectTransform>().sizeDelta = size;
+        RectTransform rect = OutputText.GetComponent<RectTransform>();
+        Vector2 size = rect.sizeDelta;
+        size.y = OutputText.preferredHeight;
+        rect.sizeDelta = size;
+        Vector2 pos = rect.anchoredPosition;
+        pos.y = size.y;
+        rect.anchoredPosition = pos;
     }
 
     public void AddLine(string stringLine)
@@ -114,8 +118,8 @@ public class Chat : MonoBehaviour, IChatClientListener
         ChannelName = channelName;
         OutputText.text = channel.ToStringMessages();
 
-        if(channel.MessageCount > 5)
-            ExpandContent(channel.MessageCount * 2);
+        if (OutputText.preferredHeight > 350.0f)
+            ExpandContent();
     }
 
     public void OnPrivateMessage(string sender, object message, string channelName)
