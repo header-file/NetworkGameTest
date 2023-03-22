@@ -22,7 +22,7 @@ public class Chat : MonoBehaviour, IChatClientListener
         Nickname = PhotonNetwork.NickName;
 
         ChatClient = new ChatClient(this);
-        ChatClient.Connect("", "1.0", new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
+        ChatClient.Connect("e9248e05-d4c3-4441-880c-c57cc38f0e71", "1.0", new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
         ScrollBar.SetActive(false);
     }
 
@@ -34,15 +34,11 @@ public class Chat : MonoBehaviour, IChatClientListener
             OnClickPublishMessage();
     }
 
-    void ExpandContent()
+    void ExpandContent(int lineCount)
     {
-        RectTransform rect = OutputText.GetComponent<RectTransform>();
-        Vector2 size = rect.sizeDelta;
-        size.y = OutputText.preferredHeight;
-        rect.sizeDelta = size;
-        Vector2 pos = rect.anchoredPosition;
-        pos.y = size.y;
-        rect.anchoredPosition = pos;
+        Vector2 size = OutputText.GetComponent<RectTransform>().sizeDelta;
+        size.y = OutputText.fontSize * lineCount;
+        OutputText.GetComponent<RectTransform>().sizeDelta = size;
     }
 
     public void AddLine(string stringLine)
@@ -118,8 +114,8 @@ public class Chat : MonoBehaviour, IChatClientListener
         ChannelName = channelName;
         OutputText.text = channel.ToStringMessages();
 
-        if(OutputText.preferredHeight > 350.0f)
-            ExpandContent();
+        if(channel.MessageCount > 5)
+            ExpandContent(channel.MessageCount * 2);
     }
 
     public void OnPrivateMessage(string sender, object message, string channelName)
