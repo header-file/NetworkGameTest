@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
     public UpperUI UpperUI;
     public Lobby Lobby;
     public RoomUI Room;
+    public InGameUI InGameUI;
 
     public void CloseLobbyAndRoom()
     {

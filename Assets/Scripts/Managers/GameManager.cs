@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     //public Player Player;
     public UIManager UiManager;
     public NetworkManager NetManager;
+    public TurnManager TurnManager;
 
 
     public static GameManager Inst() { return Instance; }
