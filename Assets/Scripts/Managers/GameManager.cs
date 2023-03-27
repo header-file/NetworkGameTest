@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public UIManager UiManager;
     public NetworkManager NetManager;
     public TurnManager TurnManager;
+    public ScoreManager ScoManager;
 
 
     public static GameManager Inst() { return Instance; }

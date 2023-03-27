@@ -15,7 +15,7 @@ public class Box : MonoBehaviour
 
     void Start()
     {
-        Nums = new int[6];
+        Nums = new int[5];
         Rots = new Quaternion[6];
         for (int i = 0; i < Nums.Length; i++)
         {
@@ -23,6 +23,7 @@ public class Box : MonoBehaviour
 
             Rots[i] = Dices[i].transform.rotation;
         }
+        Rots[5] = Quaternion.Euler(90.0f, 0.0f, -180.0f);
 
         IsRollable = true;
         IsStartCheck = false;
