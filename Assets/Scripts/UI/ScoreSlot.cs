@@ -45,5 +45,7 @@ public class ScoreSlot : MonoBehaviour
         ScoreText.text = score.ToString();
 
         IsScored = true;
+
+        GameManager.Inst().ResetScore(index, score);
     }
 }

@@ -32,6 +32,9 @@ public class Score : MonoBehaviour
 
     public void OnclickToggle()
     {
+        if (IsMoving)
+            return;
+
         IsMoving = true;
 
         if (RTransform.anchoredPosition.x > -1000.0f)

@@ -22,7 +22,7 @@ public class RoomUI : MonoBehaviour
     {
         RoomPlayerProperties = new Hashtable();
         RoomPlayerProperties.Add("IsReady", false);
-        RoomPlayerProperties.Add("IsStart", false);
+        RoomPlayerProperties.Add("IsStart", false);        
 
         AssertionExit.SetActive(false);
         gameObject.SetActive(false);
@@ -85,7 +85,12 @@ public class RoomUI : MonoBehaviour
     {
         if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("IsStart") != false &&
             PhotonNetwork.LocalPlayer.CustomProperties.GetValueOrDefault("IsStart").Equals(true))
+        {
+            PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+            PhotonNetwork.LocalPlayer.SetCustomProperties(GameManager.Inst().GamePlayerProperties);
+
             GameManager.Inst().UiManager.CloseLobbyAndRoom();
+        }
     }
 
     public void CreateRoom()

@@ -22,4 +22,36 @@ public class ScorePlayerSlot : MonoBehaviour
     public ScoreSlot Yacht;
     public ScoreSlot Choice;
     public Text Total;
+
+    
+    void Awake()
+    {
+
+    }
+
+    void Updat()
+    {
+        CalculateTotal();
+    }
+
+    public void CalculateTotal()
+    {
+        int subTotal = 0;
+        subTotal += Ones.ScoreText.text == "" ? 0 : int.Parse(Ones.ScoreText.text);
+        subTotal += Twos.ScoreText.text == "" ? 0 : int.Parse(Twos.ScoreText.text);
+        subTotal += Threes.ScoreText.text == "" ? 0 : int.Parse(Threes.ScoreText.text);
+        subTotal += Fours.ScoreText.text == "" ? 0 : int.Parse(Fours.ScoreText.text);
+        subTotal += Fives.ScoreText.text == "" ? 0 : int.Parse(Fives.ScoreText.text);
+        subTotal += Sixes.ScoreText.text == "" ? 0 : int.Parse(Sixes.ScoreText.text);
+        SubTotal.text = subTotal.ToString();
+
+        int total = subTotal;
+        total += FoaK.ScoreText.text == "" ? 0 : int.Parse(FoaK.ScoreText.text);
+        total += FullHouse.ScoreText.text == "" ? 0 : int.Parse(FullHouse.ScoreText.text);
+        total += LStraight.ScoreText.text == "" ? 0 : int.Parse(LStraight.ScoreText.text);
+        total += BStraight.ScoreText.text == "" ? 0 : int.Parse(BStraight.ScoreText.text);
+        total += Yacht.ScoreText.text == "" ? 0 : int.Parse(Yacht.ScoreText.text);
+        total += Choice.ScoreText.text == "" ? 0 : int.Parse(Choice.ScoreText.text);
+        Total.text = total.ToString();
+    }
 }
