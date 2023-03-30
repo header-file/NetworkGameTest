@@ -43,7 +43,7 @@ public class Pad : MonoBehaviourPunCallbacks, IPointerDownHandler, IPointerUpHan
         float sqr = vec.sqrMagnitude / (PadRad * PadRad);
         Vector2 normal = pos.normalized;
 
-        Player.Move(normal, sqr);
+        //Player.Move(normal, sqr);
     }
 
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
@@ -60,6 +60,6 @@ public class Pad : MonoBehaviourPunCallbacks, IPointerDownHandler, IPointerUpHan
 
         IsPointerDown = false;
 
-        Player.Stop();
+        //Player.Stop();
     }
 }

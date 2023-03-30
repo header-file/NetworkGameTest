@@ -11,12 +11,17 @@ public class UIManager : MonoBehaviour
 
     public void CloseLobbyAndRoom()
     {
+        InGameUI.gameObject.SetActive(true);
+        InGameUI.ScoreUI.InsertSlots();
+
         Lobby.gameObject.SetActive(false);
         Room.gameObject.SetActive(false);
     }
 
     public void OpenLobby()
     {
+        InGameUI.gameObject.SetActive(false);
+
         Lobby.gameObject.SetActive(true);
     }
 }

@@ -58,6 +58,8 @@ public class DiceUI : MonoBehaviour
     {
         GameManager.Inst().ScoManager.Calculate(GameManager.Inst().TurnManager.DiceBox.Nums);       
         GameManager.Inst().UiManager.InGameUI.ScoreUI.OnclickToggle();
+
+        GameManager.Inst().UiManager.InGameUI.ScoreUI.LocalWrite();
     }
 
     void OnEnable()

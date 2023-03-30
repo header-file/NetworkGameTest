@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ScoreSlot : MonoBehaviour
 {
+    public ScorePlayerSlot Slot;
     public Text ScoreText;
 
     bool IsScored;
@@ -17,7 +18,7 @@ public class ScoreSlot : MonoBehaviour
 
     public void ShowSample(int index)
     {
-        if (IsScored)
+        if (IsScored || !Slot.IsWritable)
             return;
 
         int score = GameManager.Inst().ScoManager.Scores[index];
@@ -36,7 +37,7 @@ public class ScoreSlot : MonoBehaviour
 
     public void ShowScore(int index)
     {
-        if (IsScored)
+        if (IsScored || !Slot.IsWritable)
             return;
 
         int score = GameManager.Inst().ScoManager.Scores[index];
@@ -46,6 +47,6 @@ public class ScoreSlot : MonoBehaviour
 
         IsScored = true;
 
-        GameManager.Inst().ResetScore(index, score);
+        GameManager.Inst().Player.SaveScore(index, score);
     }
 }

@@ -6,6 +6,7 @@ public class Box : MonoBehaviour
 {
     public Dice[] Dices;
     public int[] Nums;
+    public Vector3[] Euls;
 
     Quaternion[] Rots;
     bool IsRollable;
@@ -21,9 +22,8 @@ public class Box : MonoBehaviour
         {
             Nums[i] = -1;
 
-            Rots[i] = Dices[i].transform.rotation;
+            Rots[i] = Quaternion.Euler(Euls[i]);
         }
-        Rots[5] = Quaternion.Euler(90.0f, 0.0f, -180.0f);
 
         IsRollable = true;
         IsStartCheck = false;

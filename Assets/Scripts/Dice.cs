@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class Dice : MonoBehaviour
+public class Dice : MonoBehaviour, IPunObservable
 {
     public int Number;
     public bool IsRolling;
@@ -97,4 +98,22 @@ public class Dice : MonoBehaviour
         transform.position = pos;
         transform.rotation = quat;
     }
+
+    #region IPunObservable implementation
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(IsRolling);
+            stream.SendNext(Rig.useGravity);
+        }
+        else
+        {
+            IsRolling = (bool)stream.ReceiveNext();
+            Rig.useGravity = (bool)stream.ReceiveNext();
+        }
+    }
+
+    #endregion
 }

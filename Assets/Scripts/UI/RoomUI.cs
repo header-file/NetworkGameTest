@@ -87,7 +87,9 @@ public class RoomUI : MonoBehaviour
             PhotonNetwork.LocalPlayer.CustomProperties.GetValueOrDefault("IsStart").Equals(true))
         {
             PhotonNetwork.LocalPlayer.CustomProperties.Clear();
-            PhotonNetwork.LocalPlayer.SetCustomProperties(GameManager.Inst().GamePlayerProperties);
+
+            GameManager.Inst().SpanwPlayer();
+            GameManager.Inst().TurnManager.DiceBox.Reroll();
 
             GameManager.Inst().UiManager.CloseLobbyAndRoom();
         }
@@ -95,8 +97,7 @@ public class RoomUI : MonoBehaviour
 
     public void CreateRoom()
     {
-        RoomPlayerProperties.Clear();
-        RoomPlayerProperties.Add("IsReady", true);
+        RoomPlayerProperties["IsReady"] = true;
 
         PhotonNetwork.LocalPlayer.SetCustomProperties(RoomPlayerProperties);
     }
@@ -156,22 +157,19 @@ public class RoomUI : MonoBehaviour
     {
         if (PhotonNetwork.LocalPlayer.CustomProperties.GetValueOrDefault("IsReady").Equals(false))
         {
-            RoomPlayerProperties.Remove("IsReady");
-            RoomPlayerProperties.Add("IsReady", true);
+            RoomPlayerProperties["IsReady"] = true;
             PhotonNetwork.LocalPlayer.SetCustomProperties(RoomPlayerProperties);
         }
         else
         {
-            RoomPlayerProperties.Remove("IsReady");
-            RoomPlayerProperties.Add("IsReady", false);
+            RoomPlayerProperties["IsReady"] = false;
             PhotonNetwork.LocalPlayer.SetCustomProperties(RoomPlayerProperties);
         }
     }
 
     public void OnClickStartBtn()
     {
-        RoomPlayerProperties.Remove("IsStart");
-        RoomPlayerProperties.Add("IsStart", true);
+        RoomPlayerProperties["IsStart"] = true;
 
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
             PhotonNetwork.PlayerList[i].SetCustomProperties(RoomPlayerProperties);

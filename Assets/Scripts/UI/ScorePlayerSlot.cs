@@ -2,34 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
+using UnityEngine.EventSystems;
 
 public class ScorePlayerSlot : MonoBehaviour
 {
     public Text PlayerName;
-
-    public ScoreSlot Ones;
-    public ScoreSlot Twos;
-    public ScoreSlot Threes;
-    public ScoreSlot Fours;
-    public ScoreSlot Fives;
-    public ScoreSlot Sixes;
+    public ScoreSlot[] ScoreSlots;
     public Text SubTotal;
-
-    public ScoreSlot FoaK;
-    public ScoreSlot FullHouse;
-    public ScoreSlot LStraight;
-    public ScoreSlot BStraight;
-    public ScoreSlot Yacht;
-    public ScoreSlot Choice;
     public Text Total;
 
-    
+    public string UID;
+    public bool IsWritable;
+
+
     void Awake()
     {
+        if(UID != PhotonNetwork.LocalPlayer.UserId)
+            for (int i = 0; i < 12; i++)
+                ScoreSlots[i].GetComponent<EventTrigger>().enabled = false;
 
+        IsWritable = false;
     }
 
-    void Updat()
+   void Update()
     {
         CalculateTotal();
     }
@@ -37,21 +33,13 @@ public class ScorePlayerSlot : MonoBehaviour
     public void CalculateTotal()
     {
         int subTotal = 0;
-        subTotal += Ones.ScoreText.text == "" ? 0 : int.Parse(Ones.ScoreText.text);
-        subTotal += Twos.ScoreText.text == "" ? 0 : int.Parse(Twos.ScoreText.text);
-        subTotal += Threes.ScoreText.text == "" ? 0 : int.Parse(Threes.ScoreText.text);
-        subTotal += Fours.ScoreText.text == "" ? 0 : int.Parse(Fours.ScoreText.text);
-        subTotal += Fives.ScoreText.text == "" ? 0 : int.Parse(Fives.ScoreText.text);
-        subTotal += Sixes.ScoreText.text == "" ? 0 : int.Parse(Sixes.ScoreText.text);
+        for (int i = 0; i < 6; i++)
+            subTotal += ScoreSlots[i].ScoreText.text == "" ? 0 : int.Parse(ScoreSlots[i].ScoreText.text);
         SubTotal.text = subTotal.ToString();
 
         int total = subTotal;
-        total += FoaK.ScoreText.text == "" ? 0 : int.Parse(FoaK.ScoreText.text);
-        total += FullHouse.ScoreText.text == "" ? 0 : int.Parse(FullHouse.ScoreText.text);
-        total += LStraight.ScoreText.text == "" ? 0 : int.Parse(LStraight.ScoreText.text);
-        total += BStraight.ScoreText.text == "" ? 0 : int.Parse(BStraight.ScoreText.text);
-        total += Yacht.ScoreText.text == "" ? 0 : int.Parse(Yacht.ScoreText.text);
-        total += Choice.ScoreText.text == "" ? 0 : int.Parse(Choice.ScoreText.text);
+        for (int i = 6; i < 12; i++)
+            subTotal += ScoreSlots[i].ScoreText.text == "" ? 0 : int.Parse(ScoreSlots[i].ScoreText.text);
         Total.text = total.ToString();
     }
 }

@@ -34,7 +34,7 @@ public class Bullet : MonoBehaviour
             Player player = collision.gameObject.GetComponent<Player>();
             if (!player.PV.IsMine)
             {
-                player.Damage(Power);
+                //player.Damage(Power);
 
                 HitEffect(collision.GetContact(0));
             }

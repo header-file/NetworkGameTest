@@ -25,7 +25,7 @@ public class EnemyAttackRange : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            collision.gameObject.GetComponent<Player>().Damage(Power);
+            //collision.gameObject.GetComponent<Player>().Damage(Power);
             Debug.Log("You Damaged!");
         }
     }

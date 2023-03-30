@@ -5,7 +5,7 @@ using UnityEngine;
 public class DiceFloor : MonoBehaviour
 {
     Dice Dice;
-    float Count;
+    //float Count;
 
 
     void Awake()
@@ -33,6 +33,6 @@ public class DiceFloor : MonoBehaviour
         if (other.tag != "Floor")
             return;
 
-        Count = 0;
+        //Count = 0;
     }
 }
