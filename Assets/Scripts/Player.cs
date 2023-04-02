@@ -8,6 +8,7 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
 {
     public PhotonView PV;
     public Hashtable ScoreTable;
+    public int Index;
 
 
     void Awake()
@@ -17,7 +18,10 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
             ScoreTable.Add(GameManager.Inst().GetScoreName(i), 0);
 
         if (PV.IsMine)
+        {
             GameManager.Inst().Player = gameObject.GetComponent<Player>();
+            Index = int.Parse(PV.Owner.CustomProperties["Index"].ToString());
+        }
         else
             GameManager.Inst().OtherPlayers.Add(gameObject.GetComponent<Player>());
     }
@@ -40,10 +44,15 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(ScoreTable);
+            stream.SendNext(Index);
         }
         else
         {
             ScoreTable = (Hashtable)stream.ReceiveNext();
+            Index = (int)stream.ReceiveNext();
+
+            for (int i = 0; i < 12; i++)
+                GameManager.Inst().UiManager.InGameUI.ScoreUI.GetScoreData(PV.Owner.UserId, i, ScoreTable[GameManager.Inst().GetScoreName(i)].ToString());
         }
     }
 

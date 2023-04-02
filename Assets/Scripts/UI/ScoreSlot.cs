@@ -2,14 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class ScoreSlot : MonoBehaviour
 {
     public ScorePlayerSlot Slot;
     public Text ScoreText;
 
+    EventTrigger EvTrigger;
     bool IsScored;
 
+
+    void Awake()
+    {
+        EvTrigger = GetComponent<EventTrigger>();
+    }
 
     void Start()
     {
@@ -46,7 +53,17 @@ public class ScoreSlot : MonoBehaviour
         ScoreText.text = score.ToString();
 
         IsScored = true;
+        Slot.IsWritable = false;
 
         GameManager.Inst().Player.SaveScore(index, score);
+        GameManager.Inst().UiManager.InGameUI.ScoreUI.OnclickToggle();
+
+        //≈œ ¿¸»Ø
+        GameManager.Inst().TurnManager.NextTurn();
+    }
+
+    public void SetEventTrigger(bool IsEnable)
+    {
+        EvTrigger.enabled = IsEnable;
     }
 }

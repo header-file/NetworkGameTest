@@ -48,18 +48,20 @@ public class DiceUI : MonoBehaviour
 
     public void OnClickReroll()
     {
-        GameManager.Inst().TurnManager.DiceBox.Reroll();
         RerollLeft.text = "Left : " + (--Reroll).ToString();
-
-        gameObject.SetActive(false);
+        GameManager.Inst().TurnManager.DiceBox.Reroll();
     }
 
     public void OnClickConfirm()
     {
         GameManager.Inst().ScoManager.Calculate(GameManager.Inst().TurnManager.DiceBox.Nums);       
         GameManager.Inst().UiManager.InGameUI.ScoreUI.OnclickToggle();
-
         GameManager.Inst().UiManager.InGameUI.ScoreUI.LocalWrite();
+    }
+
+    public void OnClickRollBtn()
+    {
+        GameManager.Inst().TurnManager.DiceBox.Roll();
     }
 
     void OnEnable()

@@ -81,6 +81,7 @@ public class Dice : MonoBehaviour, IPunObservable
         if (IsLocked)
             return;
 
+        Rig.velocity = Vector3.zero;
         Rig.useGravity = true;
         IsRolling = true;
     }
@@ -94,6 +95,7 @@ public class Dice : MonoBehaviour, IPunObservable
 
     public void StayMode(Vector3 pos, Quaternion quat)
     {
+        Rig.velocity = Vector3.zero;
         Rig.useGravity = true;
         transform.position = pos;
         transform.rotation = quat;

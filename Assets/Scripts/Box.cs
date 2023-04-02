@@ -9,7 +9,6 @@ public class Box : MonoBehaviour
     public Vector3[] Euls;
 
     Quaternion[] Rots;
-    bool IsRollable;
     bool IsStartCheck;
     int LockCount;
 
@@ -25,16 +24,26 @@ public class Box : MonoBehaviour
             Rots[i] = Quaternion.Euler(Euls[i]);
         }
 
-        IsRollable = true;
         IsStartCheck = false;
         LockCount = 0;
     }
 
     void Update()
     {
-        if (Input.GetMouseButton(0) && IsRollable)
-            for (int i = 0; i < Dices.Length; i++)
-                Dices[i].StartRoll();
+        if (!GameManager.Inst().TurnManager.IsStartGame)
+            return;
+    }
+
+    public void Roll()
+    {
+        if ((GameManager.Inst().Player.Index != GameManager.Inst().TurnManager.TurnIndex) ||
+            GameManager.Inst().TurnManager.Phase != 0)
+            return;
+
+        for (int i = 0; i < Dices.Length; i++)
+            Dices[i].StartRoll();
+
+        GameManager.Inst().TurnManager.Phase = 1;
     }
     
     RaycastHit CastRay()
@@ -68,9 +77,8 @@ public class Box : MonoBehaviour
             Dices[i].ResetPos(Rots[Nums[i] - 1]);
         }
 
-        GameManager.Inst().UiManager.InGameUI.DiceUI.gameObject.SetActive(true);
+        GameManager.Inst().TurnManager.Phase = 2;
 
-        IsRollable = false;
         IsStartCheck = false;
     }
 
@@ -85,6 +93,6 @@ public class Box : MonoBehaviour
         }
 
         LockCount = 0;
-        IsRollable = true;
+        GameManager.Inst().TurnManager.Phase = 0;
     }
 }

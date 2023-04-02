@@ -42,6 +42,7 @@ public class Score : MonoBehaviour
         PlayerSlots[0].PlayerName.text = GameManager.Inst().Player.PV.Owner.NickName;
         PlayerSlots[0].UID = GameManager.Inst().Player.PV.Owner.UserId;
         PlayerSlots[0].transform.SetParent(SlotArea);
+        PlayerSlots[0].SetSlotTrigger(true);
 
         for (int i = 1; i <= GameManager.Inst().OtherPlayers.Count; i++)
         {
@@ -49,6 +50,7 @@ public class Score : MonoBehaviour
             PlayerSlots[i].PlayerName.text = GameManager.Inst().OtherPlayers[i - 1].PV.Owner.NickName;
             PlayerSlots[i].UID = GameManager.Inst().OtherPlayers[i - 1].PV.Owner.UserId;
             PlayerSlots[i].transform.SetParent(SlotArea);
+            PlayerSlots[i].SetSlotTrigger(false);
         }
     }
 
@@ -57,9 +59,18 @@ public class Score : MonoBehaviour
         PlayerSlots[0].IsWritable = true;
     }
 
+    public void GetScoreData(string uid, int index, string val)
+    {
+        for(int i = 0; i < PlayerSlots.Length; i++)
+        {
+            if(PlayerSlots[i].UID == uid)
+                PlayerSlots[i].ScoreSlots[index].ScoreText.text = val;
+        }
+    }
+
     public void OnclickToggle()
     {
-        if (IsMoving)
+        if (IsMoving || PlayerSlots[0].IsWritable)
             return;
 
         IsMoving = true;

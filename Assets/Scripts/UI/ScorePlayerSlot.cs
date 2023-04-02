@@ -18,10 +18,6 @@ public class ScorePlayerSlot : MonoBehaviour
 
     void Awake()
     {
-        if(UID != PhotonNetwork.LocalPlayer.UserId)
-            for (int i = 0; i < 12; i++)
-                ScoreSlots[i].GetComponent<EventTrigger>().enabled = false;
-
         IsWritable = false;
     }
 
@@ -41,5 +37,11 @@ public class ScorePlayerSlot : MonoBehaviour
         for (int i = 6; i < 12; i++)
             subTotal += ScoreSlots[i].ScoreText.text == "" ? 0 : int.Parse(ScoreSlots[i].ScoreText.text);
         Total.text = total.ToString();
+    }
+
+    public void SetSlotTrigger(bool IsEnable)
+    {
+        for (int i = 0; i < ScoreSlots.Length; i++)
+            ScoreSlots[i].SetEventTrigger(IsEnable);
     }
 }
