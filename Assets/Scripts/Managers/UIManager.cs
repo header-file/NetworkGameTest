@@ -12,7 +12,7 @@ public class UIManager : MonoBehaviour
     public void CloseLobbyAndRoom()
     {
         InGameUI.gameObject.SetActive(true);
-        InGameUI.ScoreUI.InsertSlots();
+        Invoke("ShowPlayerSlot", 3.0f);
 
         Lobby.gameObject.SetActive(false);
         Room.gameObject.SetActive(false);
@@ -23,5 +23,11 @@ public class UIManager : MonoBehaviour
         InGameUI.gameObject.SetActive(false);
 
         Lobby.gameObject.SetActive(true);
+    }
+
+    void ShowPlayerSlot()
+    {
+
+        InGameUI.ScoreUI.InsertSlots();
     }
 }

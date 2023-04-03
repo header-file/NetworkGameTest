@@ -2,20 +2,19 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class Player : MonoBehaviourPunCallbacks, IPunObservable
 {
     public PhotonView PV;
-    public Hashtable ScoreTable;
+    public string[] ScoreTable;
     public int Index;
 
 
     void Awake()
     {
-        ScoreTable = new Hashtable();
+        ScoreTable = new string[12];
         for (int i = 0; i < 12; i++)
-            ScoreTable.Add(GameManager.Inst().GetScoreName(i), 0);
+            ScoreTable[i] = "";
 
         if (PV.IsMine)
         {
@@ -34,7 +33,7 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
 
     public void SaveScore(int index, int score)
     {
-        ScoreTable[GameManager.Inst().GetScoreName(index)] = score;        
+        ScoreTable[index] = score.ToString();        
     }
 
     #region IPunObservable implementation
@@ -43,16 +42,21 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (stream.IsWriting)
         {
-            stream.SendNext(ScoreTable);
+            for (int i = 0; i < ScoreTable.Length; i++)
+                stream.SendNext(ScoreTable[i]);
+
             stream.SendNext(Index);
         }
         else
         {
-            ScoreTable = (Hashtable)stream.ReceiveNext();
-            Index = (int)stream.ReceiveNext();
+            for (int i = 0; i < ScoreTable.Length; i++)
+            {
+                this.ScoreTable[i] = (string)stream.ReceiveNext();
 
-            for (int i = 0; i < 12; i++)
-                GameManager.Inst().UiManager.InGameUI.ScoreUI.GetScoreData(PV.Owner.UserId, i, ScoreTable[GameManager.Inst().GetScoreName(i)].ToString());
+                GameManager.Inst().UiManager.InGameUI.ScoreUI.GetScoreData(PV.Owner.UserId, i, ScoreTable[i]);
+            }
+
+            this.Index = (int)stream.ReceiveNext();
         }
     }
 

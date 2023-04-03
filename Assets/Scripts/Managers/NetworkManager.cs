@@ -59,6 +59,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         RoomOptions options = new RoomOptions();
         options.MaxPlayers = (byte)MaxPlayers;
+        options.PublishUserId = true;
         //options.CustomRoomProperties = new Hashtable { { GAME_MODE, 1 } };
         PhotonNetwork.CreateRoom(RoomName, options, null);
 
