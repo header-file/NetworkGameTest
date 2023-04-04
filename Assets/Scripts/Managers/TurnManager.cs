@@ -37,7 +37,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
     void ShowTurnName()
     {
-        if (GameManager.Inst().Player.Index == (TurnIndex % (GameManager.Inst().OtherPlayers.Count + 1)))
+        if (CheckIsTurn())
             GameManager.Inst().UiManager.InGameUI.TurnText.text = GameManager.Inst().Player.PV.Owner.NickName + "'s Turn";
         else
             for (int i = 0; i < GameManager.Inst().OtherPlayers.Count; i++)
@@ -50,12 +50,28 @@ public class TurnManager : MonoBehaviour, IPunObservable
         if (Phase == 0)
         {
             GameManager.Inst().UiManager.InGameUI.DiceUI.gameObject.SetActive(false);
-            GameManager.Inst().UiManager.InGameUI.RollBtn.gameObject.SetActive(true);
+            DiceBox.Reroll();
+
+            if (CheckIsTurn())
+                GameManager.Inst().UiManager.InGameUI.RollBtn.gameObject.SetActive(true);
+            else
+                GameManager.Inst().UiManager.InGameUI.RollBtn.gameObject.SetActive(false);
         }
         else if (Phase == 1)
             GameManager.Inst().UiManager.InGameUI.RollBtn.gameObject.SetActive(false);
         else if (Phase == 2)
             GameManager.Inst().UiManager.InGameUI.DiceUI.gameObject.SetActive(true);
+    }
+
+    public bool CheckIsTurn()
+    {
+        if (!IsStartGame)
+            return false;
+
+        if (GameManager.Inst().Player.Index == (TurnIndex % (GameManager.Inst().OtherPlayers.Count + 1)))
+            return true;
+
+        return false;
     }
 
     void EndGame()
@@ -67,7 +83,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
     {
         TurnIndex++;
 
-        DiceBox.Reroll();
+        Phase = 0;
     }
 
     #region IPunObservable implementation

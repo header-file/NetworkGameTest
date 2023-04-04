@@ -49,7 +49,7 @@ public class DiceUI : MonoBehaviour
     public void OnClickReroll()
     {
         RerollLeft.text = "Left : " + (--Reroll).ToString();
-        GameManager.Inst().TurnManager.DiceBox.Reroll();
+        GameManager.Inst().TurnManager.Phase = 0;
     }
 
     public void OnClickConfirm()

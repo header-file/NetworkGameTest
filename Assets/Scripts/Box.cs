@@ -93,6 +93,5 @@ public class Box : MonoBehaviour
         }
 
         LockCount = 0;
-        GameManager.Inst().TurnManager.Phase = 0;
     }
 }

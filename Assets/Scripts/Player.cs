@@ -17,10 +17,7 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
             ScoreTable[i] = "";
 
         if (PV.IsMine)
-        {
             GameManager.Inst().Player = gameObject.GetComponent<Player>();
-            Index = int.Parse(PV.Owner.CustomProperties["Index"].ToString());
-        }
         else
             GameManager.Inst().OtherPlayers.Add(gameObject.GetComponent<Player>());
     }
@@ -29,6 +26,11 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (!PV.IsMine || !PhotonNetwork.IsConnected)
             return;
+    }
+
+    public void SetIndex()
+    {
+        Index = int.Parse(PV.Owner.CustomProperties["Index"].ToString());
     }
 
     public void SaveScore(int index, int score)

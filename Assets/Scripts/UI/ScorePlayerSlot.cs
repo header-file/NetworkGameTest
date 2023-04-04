@@ -12,6 +12,8 @@ public class ScorePlayerSlot : MonoBehaviour
     public Text SubTotal;
     public Text Total;
 
+    public Player Self;
+
     public string UID;
     public bool IsWritable;
 

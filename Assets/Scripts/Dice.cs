@@ -88,6 +88,7 @@ public class Dice : MonoBehaviour, IPunObservable
 
     public void ResetPos(Quaternion quat)
     {
+        Rig.velocity = Vector3.zero;
         Rig.useGravity = false;
         transform.position = OriPos;
         transform.rotation = quat;
@@ -107,13 +108,23 @@ public class Dice : MonoBehaviour, IPunObservable
     {
         if (stream.IsWriting)
         {
-            stream.SendNext(IsRolling);
-            stream.SendNext(Rig.useGravity);
+            if (GameManager.Inst().TurnManager.CheckIsTurn())
+            {
+                stream.SendNext(IsRolling);
+                stream.SendNext(Rig.useGravity);
+                stream.SendNext(this.transform.position);
+                stream.SendNext(this.transform.rotation);
+            }
         }
-        else
+        else if(stream.IsReading)
         {
-            IsRolling = (bool)stream.ReceiveNext();
-            Rig.useGravity = (bool)stream.ReceiveNext();
+            if (!GameManager.Inst().TurnManager.CheckIsTurn())
+            {
+                IsRolling = (bool)stream.ReceiveNext();
+                Rig.useGravity = (bool)stream.ReceiveNext();
+                this.transform.position = (Vector3)stream.ReceiveNext();
+                this.transform.rotation = (Quaternion)stream.ReceiveNext();
+            }
         }
     }
 

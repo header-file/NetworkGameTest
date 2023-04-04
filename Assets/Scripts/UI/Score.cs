@@ -43,6 +43,8 @@ public class Score : MonoBehaviour
         PlayerSlots[0].UID = GameManager.Inst().Player.PV.Owner.UserId;
         PlayerSlots[0].transform.SetParent(SlotArea);
         PlayerSlots[0].SetSlotTrigger(true);
+        PlayerSlots[0].Self = GameManager.Inst().Player;
+        GameManager.Inst().Player.SetIndex();
 
         for (int i = 1; i <= GameManager.Inst().OtherPlayers.Count; i++)
         {
@@ -51,6 +53,8 @@ public class Score : MonoBehaviour
             PlayerSlots[i].UID = GameManager.Inst().OtherPlayers[i - 1].PV.Owner.UserId;
             PlayerSlots[i].transform.SetParent(SlotArea);
             PlayerSlots[i].SetSlotTrigger(false);
+            PlayerSlots[i].Self = GameManager.Inst().OtherPlayers[i - 1];
+            GameManager.Inst().OtherPlayers[i - 1].SetIndex();
         }
     }
 
@@ -61,6 +65,9 @@ public class Score : MonoBehaviour
 
     public void GetScoreData(string uid, int index, string val)
     {
+        if (PlayerSlots == null)
+            return;
+
         for(int i = 0; i < PlayerSlots.Length; i++)
         {
             if(PlayerSlots[i].UID == uid)
