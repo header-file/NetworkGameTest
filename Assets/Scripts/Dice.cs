@@ -5,6 +5,7 @@ using Photon.Pun;
 
 public class Dice : MonoBehaviour, IPunObservable
 {
+    public PhotonView PV;
     public int Number;
     public bool IsRolling;
     public bool IsLocked;
@@ -14,13 +15,13 @@ public class Dice : MonoBehaviour, IPunObservable
     Vector3 OriPos;
 
 
-    void Start()
+    void Awake()
     {
         Rig = GetComponent<Rigidbody>();
         Rig.useGravity = false;
 
         OriPos = transform.position;
-        Number = 0;
+        Number = Random.Range(1, 7);
         IsRolling = false;
 
         Dir = new Dictionary<Vector3, int>();
@@ -34,7 +35,7 @@ public class Dice : MonoBehaviour, IPunObservable
 
     void Update()
     {
-        if (IsLocked)
+        if (IsLocked || !GameManager.Inst().TurnManager.CheckIsTurn())
             return;
 
         if (!IsRolling)
@@ -102,29 +103,49 @@ public class Dice : MonoBehaviour, IPunObservable
         transform.rotation = quat;
     }
 
+    //public bool CheckIsOwner()
+    //{
+    //    if (!GameManager.Inst().TurnManager.IsStartGame ||
+    //        PV.Owner != GameManager.Inst().Player.PV.Owner)
+    //        return false;
+
+    //    return true;
+    //}
+
+    public void SetOwner()
+    {
+        PV.TransferOwnership(GameManager.Inst().Player.PV.Owner);
+    }
+
+    public void Show(bool IsShow)
+    {
+        Rig.useGravity = false;
+        Rig.velocity = Vector3.zero;
+        IsRolling = false;
+
+        if (IsShow)
+        {
+            IsRolling = false;
+        }
+        else
+        {
+            IsRolling = true;
+        }
+    }
+
     #region IPunObservable implementation
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
-            if (GameManager.Inst().TurnManager.CheckIsTurn())
-            {
-                stream.SendNext(IsRolling);
-                stream.SendNext(Rig.useGravity);
-                stream.SendNext(this.transform.position);
-                stream.SendNext(this.transform.rotation);
-            }
+            stream.SendNext(IsRolling);
+            stream.SendNext(Rig.useGravity);
         }
-        else if(stream.IsReading)
+        else
         {
-            if (!GameManager.Inst().TurnManager.CheckIsTurn())
-            {
-                IsRolling = (bool)stream.ReceiveNext();
-                Rig.useGravity = (bool)stream.ReceiveNext();
-                this.transform.position = (Vector3)stream.ReceiveNext();
-                this.transform.rotation = (Quaternion)stream.ReceiveNext();
-            }
+            IsRolling = (bool)stream.ReceiveNext();
+            Rig.useGravity = (bool)stream.ReceiveNext();
         }
     }
 

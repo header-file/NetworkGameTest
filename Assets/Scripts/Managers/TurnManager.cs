@@ -41,7 +41,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
             GameManager.Inst().UiManager.InGameUI.TurnText.text = GameManager.Inst().Player.PV.Owner.NickName + "'s Turn";
         else
             for (int i = 0; i < GameManager.Inst().OtherPlayers.Count; i++)
-                if (GameManager.Inst().OtherPlayers[i].Index == (TurnIndex % (GameManager.Inst().OtherPlayers.Count + 1)))
+                if (GameManager.Inst().OtherPlayers[i].Index == (TurnIndex % GameManager.Inst().PlayerCount))
                     GameManager.Inst().UiManager.InGameUI.TurnText.text = GameManager.Inst().OtherPlayers[i].PV.Owner.NickName + "'s Turn";
     }
 
@@ -53,9 +53,15 @@ public class TurnManager : MonoBehaviour, IPunObservable
             DiceBox.Reroll();
 
             if (CheckIsTurn())
+            {
                 GameManager.Inst().UiManager.InGameUI.RollBtn.gameObject.SetActive(true);
+                DiceBox.ShowDice(true);
+            }
             else
+            {
                 GameManager.Inst().UiManager.InGameUI.RollBtn.gameObject.SetActive(false);
+                DiceBox.ShowDice(false);
+            }
         }
         else if (Phase == 1)
             GameManager.Inst().UiManager.InGameUI.RollBtn.gameObject.SetActive(false);
@@ -65,13 +71,11 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
     public bool CheckIsTurn()
     {
-        if (!IsStartGame)
+        if (!IsStartGame ||
+            GameManager.Inst().Player.Index != (TurnIndex % GameManager.Inst().PlayerCount))
             return false;
 
-        if (GameManager.Inst().Player.Index == (TurnIndex % (GameManager.Inst().OtherPlayers.Count + 1)))
-            return true;
-
-        return false;
+        return true;
     }
 
     void EndGame()

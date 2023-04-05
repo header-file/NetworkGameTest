@@ -17,7 +17,10 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
             ScoreTable[i] = "";
 
         if (PV.IsMine)
+        {
             GameManager.Inst().Player = gameObject.GetComponent<Player>();
+            GameManager.Inst().TurnManager.DiceBox.MakeDice();
+        }
         else
             GameManager.Inst().OtherPlayers.Add(gameObject.GetComponent<Player>());
     }

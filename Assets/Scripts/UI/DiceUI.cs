@@ -25,6 +25,20 @@ public class DiceUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    void Update()
+    {
+        if(GameManager.Inst().TurnManager.CheckIsTurn())
+        {
+            ConfirmBtn.interactable = true;
+            RerollBtn.interactable = true;
+        }
+        else
+        {
+            ConfirmBtn.interactable = false;
+            RerollBtn.interactable = false;
+        }
+    }
+
     public void OnClickLock(int index)
     {
         if (!GameManager.Inst().TurnManager.DiceBox.Dices[index].IsLocked)

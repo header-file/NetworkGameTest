@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class Box : MonoBehaviour
 {
     public Dice[] Dices;
     public int[] Nums;
     public Vector3[] Euls;
+    public Vector3[] Poses;
 
     Quaternion[] Rots;
     bool IsStartCheck;
@@ -26,12 +28,6 @@ public class Box : MonoBehaviour
 
         IsStartCheck = false;
         LockCount = 0;
-    }
-
-    void Update()
-    {
-        if (!GameManager.Inst().TurnManager.IsStartGame)
-            return;
     }
 
     public void Roll()
@@ -61,6 +57,9 @@ public class Box : MonoBehaviour
 
     public void StartCheck()
     {
+        if (!GameManager.Inst().TurnManager.CheckIsTurn())
+            return;
+
         if (!IsStartCheck)
         {
             IsStartCheck = true;
@@ -93,5 +92,34 @@ public class Box : MonoBehaviour
         }
 
         LockCount = 0;
+    }
+
+    public void MakeDice()
+    {
+        Dices = new Dice[5];
+
+        for (int i = 0; i < Dices.Length; i++)
+        {
+            GameObject dice = PhotonNetwork.Instantiate("Prefabs/Dice", Poses[i], Rots[i]);
+            Dices[i] = dice.GetComponent<Dice>();
+            Dices[i].SetOwner();
+        }
+
+        ShowDice(false);
+    }
+
+    public void SetOwner()
+    {
+        for (int i = 0; i < Dices.Length; i++)
+            Dices[i].SetOwner();
+    }
+
+    public void ShowDice(bool IsShow)
+    {
+        for (int i = 0; i < Dices.Length; i++)
+        {
+            Dices[i].transform.position = (IsShow == true ? Poses[i] : new Vector3(0.0f, -50.0f, 0.0f));
+            Dices[i].Show(IsShow);
+        }
     }
 }

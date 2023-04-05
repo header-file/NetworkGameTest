@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     public Player Player;
     public List<Player> OtherPlayers;
+    public int PlayerCount;
 
     public UIManager UiManager;
     public NetworkManager NetManager;

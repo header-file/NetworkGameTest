@@ -27,7 +27,8 @@ public class UIManager : MonoBehaviour
 
     void ShowPlayerSlot()
     {
-
         InGameUI.ScoreUI.InsertSlots();
+
+        GameManager.Inst().TurnManager.IsStartGame = true;
     }
 }

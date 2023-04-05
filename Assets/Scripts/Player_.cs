@@ -15,8 +15,8 @@ public class Player_ : MonoBehaviourPunCallbacks
     public float Gravity;
 
     //Attack
-    bool IsAttacking;
-    int AttackCount;
+    //bool IsAttacking;
+    //int AttackCount;
 
     //Status
     int MaxHP;
@@ -28,8 +28,8 @@ public class Player_ : MonoBehaviourPunCallbacks
         Gravity = 20.0f;
         Speed = 5.0f;
 
-        IsAttacking = false;
-        AttackCount = 0;
+        //IsAttacking = false;
+        //AttackCount = 0;
     }
 
 	void Start ()

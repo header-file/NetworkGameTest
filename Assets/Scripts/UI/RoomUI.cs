@@ -93,8 +93,8 @@ public class RoomUI : MonoBehaviour
                 if(PhotonNetwork.PlayerList[i].UserId == PhotonNetwork.LocalPlayer.UserId)
                    PhotonNetwork.PlayerList[i].CustomProperties["Index"] = i;
 
+            GameManager.Inst().PlayerCount = PhotonNetwork.PlayerList.Length;
             GameManager.Inst().SpanwPlayer();
-            GameManager.Inst().TurnManager.IsStartGame = true;
             GameManager.Inst().TurnManager.NextTurn();
             GameManager.Inst().TurnManager.DiceBox.Reroll();
 

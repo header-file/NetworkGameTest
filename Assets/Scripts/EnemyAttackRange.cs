@@ -6,14 +6,14 @@ public class EnemyAttackRange : MonoBehaviour
 {
     public CapsuleCollider Col;
 
-    int Power;
+    //int Power;
 
 
     void Awake()
     {
         Col = GetComponent<CapsuleCollider>();
 
-        Power = 2;
+        //Power = 2;
     }
 
     void Start()
