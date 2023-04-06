@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -60,7 +61,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         RoomOptions options = new RoomOptions();
         options.MaxPlayers = (byte)MaxPlayers;
         options.PublishUserId = true;
-        //options.CustomRoomProperties = new Hashtable { { GAME_MODE, 1 } };
         PhotonNetwork.CreateRoom(RoomName, options, null);
 
         Debug.Log("Create Room : " + RoomName);

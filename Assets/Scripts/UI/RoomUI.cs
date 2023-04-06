@@ -95,7 +95,7 @@ public class RoomUI : MonoBehaviour
 
             GameManager.Inst().PlayerCount = PhotonNetwork.PlayerList.Length;
             GameManager.Inst().SpanwPlayer();
-            GameManager.Inst().TurnManager.NextTurn();
+            //GameManager.Inst().TurnManager.NextTurn();
             GameManager.Inst().TurnManager.DiceBox.Reroll();
 
             GameManager.Inst().UiManager.CloseLobbyAndRoom();

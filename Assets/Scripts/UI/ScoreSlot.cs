@@ -58,7 +58,6 @@ public class ScoreSlot : MonoBehaviour
         GameManager.Inst().Player.SaveScore(index, score);
         GameManager.Inst().UiManager.InGameUI.ScoreUI.OnclickToggle();
 
-        //ÅÏ ÀüÈ¯
         GameManager.Inst().TurnManager.NextTurn();
     }
 

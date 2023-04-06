@@ -13,6 +13,8 @@ public class Dice : MonoBehaviour, IPunObservable
     Rigidbody Rig;
     Dictionary<Vector3, int> Dir;
     Vector3 OriPos;
+    Vector3 NetworkPosition;
+    Quaternion NetworkRotation;
 
 
     void Awake()
@@ -43,6 +45,15 @@ public class Dice : MonoBehaviour, IPunObservable
         else
             CheckValue();
     }
+
+    //void FixedUpdate()
+    //{
+    //    if(!PV.IsMine)
+    //    {
+    //        Rig.position = Vector3.MoveTowards(Rig.position, NetworkPosition, Time.fixedDeltaTime);
+    //        Rig.rotation = Quaternion.RotateTowards(Rig.rotation, NetworkRotation, Time.fixedDeltaTime * 100.0f);
+    //    }
+    //}
 
     void OnCollisionEnter(Collision collision)
     {
@@ -103,15 +114,6 @@ public class Dice : MonoBehaviour, IPunObservable
         transform.rotation = quat;
     }
 
-    //public bool CheckIsOwner()
-    //{
-    //    if (!GameManager.Inst().TurnManager.IsStartGame ||
-    //        PV.Owner != GameManager.Inst().Player.PV.Owner)
-    //        return false;
-
-    //    return true;
-    //}
-
     public void SetOwner()
     {
         PV.TransferOwnership(GameManager.Inst().Player.PV.Owner);
@@ -141,11 +143,22 @@ public class Dice : MonoBehaviour, IPunObservable
         {
             stream.SendNext(IsRolling);
             stream.SendNext(Rig.useGravity);
+
+            //stream.SendNext(transform.position);
+            //stream.SendNext(transform.rotation);
+            //stream.SendNext(Rig.velocity);
         }
         else
         {
             IsRolling = (bool)stream.ReceiveNext();
             Rig.useGravity = (bool)stream.ReceiveNext();
+
+            //NetworkPosition = (Vector3)stream.ReceiveNext();
+            //NetworkRotation = (Quaternion)stream.ReceiveNext();
+            //Rig.velocity = (Vector3)stream.ReceiveNext();
+
+            //float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
+            //NetworkPosition += Rig.velocity * lag;
         }
     }
 

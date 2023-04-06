@@ -25,6 +25,7 @@ public class Box : MonoBehaviour
 
             Rots[i] = Quaternion.Euler(Euls[i]);
         }
+        Rots[5] = Quaternion.Euler(Euls[5]);
 
         IsStartCheck = false;
         LockCount = 0;
@@ -32,7 +33,7 @@ public class Box : MonoBehaviour
 
     public void Roll()
     {
-        if ((GameManager.Inst().Player.Index != GameManager.Inst().TurnManager.TurnIndex) ||
+        if (!GameManager.Inst().TurnManager.CheckIsTurn() ||
             GameManager.Inst().TurnManager.Phase != 0)
             return;
 
@@ -64,7 +65,7 @@ public class Box : MonoBehaviour
         {
             IsStartCheck = true;
             CancelInvoke("DiceCheck");
-            Invoke("DiceCheck", 2.0f);
+            Invoke("DiceCheck", 3.0f);
         }
     }
 

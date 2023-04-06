@@ -51,17 +51,21 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
                 stream.SendNext(ScoreTable[i]);
 
             stream.SendNext(Index);
+            stream.SendNext(GameManager.Inst().TurnManager.Phase);
+            stream.SendNext(GameManager.Inst().TurnManager.GetTurn());
         }
         else
         {
             for (int i = 0; i < ScoreTable.Length; i++)
             {
-                this.ScoreTable[i] = (string)stream.ReceiveNext();
+                ScoreTable[i] = (string)stream.ReceiveNext();
 
                 GameManager.Inst().UiManager.InGameUI.ScoreUI.GetScoreData(PV.Owner.UserId, i, ScoreTable[i]);
             }
 
-            this.Index = (int)stream.ReceiveNext();
+            Index = (int)stream.ReceiveNext();
+            GameManager.Inst().TurnManager.Phase = (int)stream.ReceiveNext();
+            GameManager.Inst().TurnManager.SetTurn((int)stream.ReceiveNext());
         }
     }
 

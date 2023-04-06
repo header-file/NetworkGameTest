@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 
-public class TurnManager : MonoBehaviour, IPunObservable
+public class TurnManager : MonoBehaviour
 {
     /*
      Phase 0 : Standby Roll
@@ -11,15 +12,22 @@ public class TurnManager : MonoBehaviour, IPunObservable
      Phase 2 : Dice Check
      */
 
+    public Text Turn;
+
     public Box DiceBox;
     public bool IsStartGame;
-    public int TurnIndex;
     public int Phase;
 
+    int TurnIndex;
+
+
+    public int GetTurn() { return TurnIndex; }
+    public void SetTurn(int turn) { TurnIndex = turn; }
 
     void Awake()
     {
-        TurnIndex = -1;
+        TurnIndex = 0;
+        Phase = 0;
         IsStartGame = false;
     }
 
@@ -31,8 +39,10 @@ public class TurnManager : MonoBehaviour, IPunObservable
         PhaseCheck();
         ShowTurnName();
 
-        if (TurnIndex >= (12 * (GameManager.Inst().OtherPlayers.Count + 1)))
+        if (TurnIndex >= (12 * GameManager.Inst().PlayerCount))
             EndGame();
+
+        ShowTurn();
     }
 
     void ShowTurnName()
@@ -80,7 +90,8 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
     void EndGame()
     {
-
+        GameManager.Inst().UiManager.InGameUI.WinnerName.text = GameManager.Inst().UiManager.InGameUI.ScoreUI.FindWinner();
+        GameManager.Inst().UiManager.InGameUI.Winner.SetActive(true);
     }
 
     public void NextTurn()
@@ -90,21 +101,8 @@ public class TurnManager : MonoBehaviour, IPunObservable
         Phase = 0;
     }
 
-    #region IPunObservable implementation
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    void ShowTurn()
     {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(TurnIndex);
-            stream.SendNext(Phase);
-        }
-        else
-        {
-            TurnIndex = (int)stream.ReceiveNext();
-            Phase = (int)stream.ReceiveNext();
-        }
+        Turn.text = TurnIndex.ToString();
     }
-
-    #endregion
 }

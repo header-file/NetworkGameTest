@@ -9,4 +9,6 @@ public class InGameUI : MonoBehaviour
     public Score ScoreUI;
     public Text TurnText;
     public Button RollBtn;
+    public GameObject Winner;
+    public Text WinnerName;
 }

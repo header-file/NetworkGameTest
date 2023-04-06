@@ -86,13 +86,22 @@ public class Score : MonoBehaviour
             GoalPos = new Vector2(-1400.0f, 0.0f);
         else
             GoalPos = Vector2.zero;
+    }
 
-        if(PlayerSlots.Length != GameManager.Inst().OtherPlayers.Count + 1)
+    public string FindWinner()
+    {
+        int max = 0;
+        string name = "";
+        for(int i = 0; i < PlayerSlots.Length; i++)
         {
-            for (int i = 0; i < SlotArea.childCount; i++)
-                Destroy(SlotArea.GetChild(i).gameObject);
-
-            InsertSlots();
+            int val = int.Parse(PlayerSlots[i].Total.text);
+            if(val > max)
+            {
+                name = PlayerSlots[i].PlayerName.text;
+                max = val;
+            }
         }
+
+        return name;
     }
 }

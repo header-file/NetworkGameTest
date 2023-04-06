@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class UIManager : MonoBehaviour
 {
@@ -18,11 +19,15 @@ public class UIManager : MonoBehaviour
         Room.gameObject.SetActive(false);
     }
 
-    public void OpenLobby()
+    public void OpenLobbyAndRoom()
     {
         InGameUI.gameObject.SetActive(false);
 
         Lobby.gameObject.SetActive(true);
+        Room.gameObject.SetActive(true);
+
+        if (!PhotonNetwork.LocalPlayer.IsMasterClient)
+            PhotonNetwork.LocalPlayer.CustomProperties["IsReady"] = false;
     }
 
     void ShowPlayerSlot()
