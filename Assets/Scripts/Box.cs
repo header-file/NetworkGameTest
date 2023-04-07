@@ -119,7 +119,7 @@ public class Box : MonoBehaviour
     {
         for (int i = 0; i < Dices.Length; i++)
         {
-            Dices[i].transform.position = (IsShow == true ? Poses[i] : new Vector3(0.0f, -50.0f, 0.0f));
+            Dices[i].transform.position = (IsShow == true ? Poses[i] : new Vector3(100.0f, 20.0f, 0.0f));
             Dices[i].Show(IsShow);
         }
     }

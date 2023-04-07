@@ -197,8 +197,8 @@ public class RoomUI : MonoBehaviour
 
     void ExitRoom()
     {
-        for (int i = 0; i < PlayerSlots.childCount; i++)
-            Destroy(PlayerSlots.GetChild(i).gameObject);
+        //for (int i = 0; i < PlayerSlots.childCount; i++)
+        //    Destroy(PlayerSlots.GetChild(i).gameObject);
 
         gameObject.SetActive(false);
 

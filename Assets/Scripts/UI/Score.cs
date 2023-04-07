@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class Score : MonoBehaviour
 {
-    public ScorePlayerSlot ScorePlayerSlotPref;
-    public Transform SlotArea;
+    //public ScorePlayerSlot ScorePlayerSlotPref;
+    //public Transform SlotArea;
+    public ScorePlayerSlot[] PlayerSlots;
 
-    ScorePlayerSlot[] PlayerSlots;
     RectTransform RTransform;
     bool IsMoving;
     Vector2 GoalPos;
@@ -36,26 +36,23 @@ public class Score : MonoBehaviour
 
     public void InsertSlots()
     {
-        PlayerSlots = new ScorePlayerSlot[GameManager.Inst().OtherPlayers.Count + 1];
-
-        PlayerSlots[0] = Instantiate(ScorePlayerSlotPref);
         PlayerSlots[0].PlayerName.text = GameManager.Inst().Player.PV.Owner.NickName;
-        PlayerSlots[0].UID = GameManager.Inst().Player.PV.Owner.UserId;
-        PlayerSlots[0].transform.SetParent(SlotArea);
-        PlayerSlots[0].SetSlotTrigger(true);
+        PlayerSlots[0].UID = GameManager.Inst().Player.PV.Owner.UserId;PlayerSlots[0].SetSlotTrigger(true);
         PlayerSlots[0].Self = GameManager.Inst().Player;
         GameManager.Inst().Player.SetIndex();
 
         for (int i = 1; i <= GameManager.Inst().OtherPlayers.Count; i++)
         {
-            PlayerSlots[i] = Instantiate(ScorePlayerSlotPref);
             PlayerSlots[i].PlayerName.text = GameManager.Inst().OtherPlayers[i - 1].PV.Owner.NickName;
             PlayerSlots[i].UID = GameManager.Inst().OtherPlayers[i - 1].PV.Owner.UserId;
-            PlayerSlots[i].transform.SetParent(SlotArea);
             PlayerSlots[i].SetSlotTrigger(false);
             PlayerSlots[i].Self = GameManager.Inst().OtherPlayers[i - 1];
             GameManager.Inst().OtherPlayers[i - 1].SetIndex();
         }
+
+        if(GameManager.Inst().PlayerCount < 4)
+            for (int i = GameManager.Inst().PlayerCount; i < 4; i++)
+                PlayerSlots[i].gameObject.SetActive(false);
     }
 
     public void LocalWrite()
