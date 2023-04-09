@@ -14,6 +14,9 @@ public class DiceUI : MonoBehaviour
     int LockCount;
 
 
+    public int GetReroll() { return Reroll; }
+    public void SetRerollLeft(int count) { RerollLeft.text = "Left : " + count.ToString(); }
+
     void Start()
     {
         Reroll = 2;
@@ -39,6 +42,23 @@ public class DiceUI : MonoBehaviour
         }
     }
 
+    public void ResetData()
+    {
+        Reroll = 2;
+        LockCount = 0;
+
+        for (int i = 0; i < Locks.Length; i++)
+        {
+            Locks[i].transform.GetChild(0).gameObject.SetActive(false);
+            GameManager.Inst().TurnManager.DiceBox.Dices[i].IsLocked = false;
+        }
+
+        RerollLeft.text = "Left : " + Reroll.ToString();
+
+        RerollBtn.interactable = true;
+        ConfirmBtn.interactable = true;
+    }
+
     public void OnClickLock(int index)
     {
         if (!GameManager.Inst().TurnManager.DiceBox.Dices[index].IsLocked)
@@ -62,8 +82,10 @@ public class DiceUI : MonoBehaviour
 
     public void OnClickReroll()
     {
-        RerollLeft.text = "Left : " + (--Reroll).ToString();
+        Reroll--;
+        RerollLeft.text = "Left : " + Reroll.ToString();
         GameManager.Inst().TurnManager.Phase = 0;
+        GameManager.Inst().TurnManager.DiceBox.Reroll();
     }
 
     public void OnClickConfirm()
@@ -80,9 +102,20 @@ public class DiceUI : MonoBehaviour
 
     void OnEnable()
     {
-        if (Reroll > 0)
-            return;
+        if (Reroll == 0 || Reroll == 2)
+        {
+            LockCount = 0;
 
-        RerollBtn.interactable = false;
+            for (int i = 0; i < Locks.Length; i++)
+            {
+                Locks[i].transform.GetChild(0).gameObject.SetActive(false);
+                GameManager.Inst().TurnManager.DiceBox.Dices[i].IsLocked = false;
+            }
+
+            RerollLeft.text = "Left : " + Reroll.ToString();
+
+            RerollBtn.interactable = true;
+            ConfirmBtn.interactable = true;
+        }
     }
 }

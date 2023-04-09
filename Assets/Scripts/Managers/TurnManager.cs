@@ -19,6 +19,7 @@ public class TurnManager : MonoBehaviour
     public int Phase;
 
     int TurnIndex;
+    bool IsStartTurn;
 
 
     public int GetTurn() { return TurnIndex; }
@@ -60,17 +61,15 @@ public class TurnManager : MonoBehaviour
         if (Phase == 0)
         {
             GameManager.Inst().UiManager.InGameUI.DiceUI.gameObject.SetActive(false);
-            DiceBox.Reroll();
 
             if (CheckIsTurn())
             {
                 GameManager.Inst().UiManager.InGameUI.RollBtn.gameObject.SetActive(true);
-                DiceBox.ShowDice(true);
+                StartTurn();
             }
             else
             {
                 GameManager.Inst().UiManager.InGameUI.RollBtn.gameObject.SetActive(false);
-                DiceBox.ShowDice(false);
             }
         }
         else if (Phase == 1)
@@ -99,6 +98,19 @@ public class TurnManager : MonoBehaviour
         TurnIndex++;
 
         Phase = 0;
+        IsStartTurn = false;
+
+        GameManager.Inst().UiManager.InGameUI.DiceUI.ResetData();
+        DiceBox.ShowDice(false);
+    }
+
+    void StartTurn()
+    {
+        if (IsStartTurn)
+            return;
+
+        GameManager.Inst().TurnManager.DiceBox.ShowDice(true);
+        IsStartTurn = true;
     }
 
     void ShowTurn()

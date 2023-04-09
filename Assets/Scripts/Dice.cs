@@ -109,7 +109,7 @@ public class Dice : MonoBehaviour, IPunObservable
     public void StayMode(Vector3 pos, Quaternion quat)
     {
         Rig.velocity = Vector3.zero;
-        Rig.useGravity = true;
+        Rig.useGravity = false;
         transform.position = pos;
         transform.rotation = quat;
     }
@@ -143,6 +143,7 @@ public class Dice : MonoBehaviour, IPunObservable
         {
             stream.SendNext(IsRolling);
             stream.SendNext(Rig.useGravity);
+            stream.SendNext(Rig.velocity);
 
             //stream.SendNext(transform.position);
             //stream.SendNext(transform.rotation);
@@ -152,6 +153,7 @@ public class Dice : MonoBehaviour, IPunObservable
         {
             IsRolling = (bool)stream.ReceiveNext();
             Rig.useGravity = (bool)stream.ReceiveNext();
+            Rig.velocity = (Vector3)stream.ReceiveNext();
 
             //NetworkPosition = (Vector3)stream.ReceiveNext();
             //NetworkRotation = (Quaternion)stream.ReceiveNext();

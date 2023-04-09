@@ -53,6 +53,7 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
             stream.SendNext(Index);
             stream.SendNext(GameManager.Inst().TurnManager.Phase);
             stream.SendNext(GameManager.Inst().TurnManager.GetTurn());
+            stream.SendNext(GameManager.Inst().UiManager.InGameUI.DiceUI.GetReroll());
         }
         else
         {
@@ -66,6 +67,9 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
             Index = (int)stream.ReceiveNext();
             GameManager.Inst().TurnManager.Phase = (int)stream.ReceiveNext();
             GameManager.Inst().TurnManager.SetTurn((int)stream.ReceiveNext());
+
+            if(!GameManager.Inst().TurnManager.CheckIsTurn())
+                GameManager.Inst().UiManager.InGameUI.DiceUI.SetRerollLeft((int)stream.ReceiveNext());
         }
     }
 
