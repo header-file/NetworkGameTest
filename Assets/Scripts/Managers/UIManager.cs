@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
     public Lobby Lobby;
     public RoomUI Room;
     public InGameUI InGameUI;
+    public GameObject ChatUI;
+
 
     public void CloseLobbyAndRoom()
     {
@@ -23,11 +25,11 @@ public class UIManager : MonoBehaviour
     {
         InGameUI.gameObject.SetActive(false);
 
-        Lobby.gameObject.SetActive(true);
-        Room.gameObject.SetActive(true);
-
         if (!PhotonNetwork.LocalPlayer.IsMasterClient)
             PhotonNetwork.LocalPlayer.CustomProperties["IsReady"] = false;
+
+        Lobby.gameObject.SetActive(true);
+        Room.gameObject.SetActive(true);
     }
 
     void ShowPlayerSlot()

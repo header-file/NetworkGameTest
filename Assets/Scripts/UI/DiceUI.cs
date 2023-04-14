@@ -33,7 +33,8 @@ public class DiceUI : MonoBehaviour
         if(GameManager.Inst().TurnManager.CheckIsTurn())
         {
             ConfirmBtn.interactable = true;
-            RerollBtn.interactable = true;
+            if(Reroll != 0)
+                RerollBtn.interactable = true;
         }
         else
         {
@@ -116,6 +117,9 @@ public class DiceUI : MonoBehaviour
 
             RerollBtn.interactable = true;
             ConfirmBtn.interactable = true;
+
+            if(Reroll == 0)
+                RerollBtn.interactable = false;
         }
     }
 }

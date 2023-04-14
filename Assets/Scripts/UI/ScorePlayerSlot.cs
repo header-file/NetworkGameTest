@@ -37,7 +37,7 @@ public class ScorePlayerSlot : MonoBehaviour
 
         int total = subTotal;
         for (int i = 6; i < 12; i++)
-            subTotal += ScoreSlots[i].ScoreText.text == "" ? 0 : int.Parse(ScoreSlots[i].ScoreText.text);
+            total += ScoreSlots[i].ScoreText.text == "" ? 0 : int.Parse(ScoreSlots[i].ScoreText.text);
         Total.text = total.ToString();
     }
 

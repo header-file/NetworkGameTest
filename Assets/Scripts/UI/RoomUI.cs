@@ -99,6 +99,7 @@ public class RoomUI : MonoBehaviour
             GameManager.Inst().TurnManager.DiceBox.Reroll();
 
             GameManager.Inst().UiManager.CloseLobbyAndRoom();
+            GameManager.Inst().UiManager.ChatUI.SetActive(true);
         }
     }
 

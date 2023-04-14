@@ -24,6 +24,7 @@ public class Chat : MonoBehaviour, IChatClientListener
         ChatClient = new ChatClient(this);
         ChatClient.Connect("", "1.0", new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
         ScrollBar.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     void Update()
